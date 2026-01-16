@@ -4,6 +4,8 @@ import {
   Button,
   TextField,
   CircularProgress,
+  Select,
+  MenuItem,
 } from '@mui/material'
 import { useAppDispatch, useAppSelector } from '@/app/hooks'
 import { fetchLalin } from '@/features/lalin/lalinSlice'
@@ -11,6 +13,8 @@ import { calculateSummary } from '@/utils/lalinSummary'
 import LalinTable from '@/components/tables/LalinTable'
 import { Pagination } from '@mui/material'
 import { transformLalinRow } from '@/utils/lalinTransformer'
+import { exportToCSV } from '@/utils/exportCsv'
+import { exportToExcel } from '@/utils/exportExcel'
 
 const LaporanLalinPage = () => {
   const dispatch = useAppDispatch()
@@ -65,7 +69,19 @@ const LaporanLalinPage = () => {
       })
     )
   }
-
+  const handleExport = () => {
+    exportToCSV(
+      transformedData,
+      `laporan-lalin-${tanggal || 'all'}.csv`
+    )
+  }
+  const handleExportExcel = () => {
+    exportToExcel(
+      transformedData,
+      `laporan-lalin-${tanggal || 'all'}.xlsx`
+    )
+  }
+  
   const summary = calculateSummary(data)
   return (
     <Box p={3}>
@@ -84,6 +100,19 @@ const LaporanLalinPage = () => {
         <Button variant="outlined" color="secondary" onClick={handleResetFilter}>
           Reset
         </Button>
+
+        <Select
+          value=""
+          displayEmpty
+          onChange={(e) => {
+            if (e.target.value === 'csv') handleExport()
+            if (e.target.value === 'excel') handleExportExcel()
+          }}
+        >
+          <MenuItem value="" disabled>Export</MenuItem>
+          <MenuItem value="csv">Export CSV</MenuItem>
+          <MenuItem value="excel">Export Excel</MenuItem>
+        </Select>
       </Box>
 
       {/* SUMMARY */}

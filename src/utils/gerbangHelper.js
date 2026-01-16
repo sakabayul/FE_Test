@@ -31,7 +31,6 @@ export const generateGerbangPayload = ({
       .map((g) => Number(g.id))
       .filter((id) => !isNaN(id))
 
-    // 🔥 AMBIL ID TERKECIL YANG KOSONG
     newId = findSmallestMissingId(ids)
   } else {
     const cabangIds = existingGerbangs

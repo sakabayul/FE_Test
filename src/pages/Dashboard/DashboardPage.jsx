@@ -85,8 +85,8 @@ const DashboardPage = () => {
         gap={2}
         sx={{
           gridTemplateColumns: {
-            md: 'minmax(300px, 1fr)', // mobile → stack 1 kolom
-            lg: '1fr 1fr',            // desktop → 2 kolom
+            md: 'minmax(300px, 1fr)',
+            lg: '1fr 1fr',
           },
         }}
         mb={3}

@@ -4,7 +4,6 @@ import { useAppSelector } from '@/app/hooks'
 const ProtectedRoute = () => {
   const { token } = useAppSelector((state) => state.auth)
 
-  // SINGLE SOURCE OF TRUTH
   if (!token) {
     return <Navigate to="/login" replace />
   }

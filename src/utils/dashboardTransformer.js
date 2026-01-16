@@ -117,7 +117,6 @@ export const transformCabangPie = (
     return []
   }
 
-  // Map IdCabang → NamaCabang (unique)
   const cabangMap = new Map()
   gerbangData.forEach((g) => {
     if (!cabangMap.has(g.IdCabang)) {
@@ -132,7 +131,6 @@ export const transformCabangPie = (
     const cabangName =
       cabangMap.get(cabangId) || `Cabang ${cabangId}`
 
-    // SETIAP ROW = 1 KALI LEWAT
     result[cabangName] = (result[cabangName] || 0) + 1
   })
 

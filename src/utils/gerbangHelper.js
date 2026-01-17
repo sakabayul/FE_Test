@@ -1,5 +1,4 @@
-const normalize = (str = '') =>
-  str.toLowerCase().replace(/\s+/g, '').trim()
+const normalize = (str = '') => str.toLowerCase().replace(/\s+/g, '').trim()
 
 const findSmallestMissingId = (ids = []) => {
   const set = new Set(ids)

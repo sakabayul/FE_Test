@@ -72,7 +72,6 @@ const gerbangSlice = createSlice({
         )
       })
       .addCase(updateGerbang.fulfilled, (state, action) => {
-        console.log('UPDATE PAYLOAD:', action.payload)
         const updated = action.payload.data
 
         const idx = state.data.findIndex(

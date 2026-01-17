@@ -1,3 +1,4 @@
+import dayjs from 'dayjs'
 import { Box, Grid, TextField, Button } from '@mui/material'
 import { useEffect, useState, useMemo } from 'react'
 import { useAppDispatch, useAppSelector } from '@/app/hooks'
@@ -16,45 +17,43 @@ import PieChart from '@/components/charts/PieChart'
 
 const DashboardPage = () => {
   const dispatch = useAppDispatch()
-
+  const [tanggal, setTanggal] = useState("")
+  const [isSearchAll, setIsSearchAll] = useState(false)
+  
   const { data: lalinData } = useAppSelector((state) => state.lalin)
   const { data: gerbangData } = useAppSelector((state) => state.gerbang)
 
-  const [isSearchAll, setIsSearchAll] = useState(false)
-  const [tanggal, setTanggal] = useState(null)
+  const defaultTanggal = useMemo(() => {
+    if (!lalinData.length) return ''
+
+    return dayjs(lalinData[0].Tanggal).format('YYYY-MM-DD')
+  }, [lalinData])
+
+  const selectedTanggal = useMemo(() => {
+    if (isSearchAll) return null
+    return tanggal || defaultTanggal
+  }, [tanggal, defaultTanggal, isSearchAll])
 
   useEffect(() => {
     dispatch(fetchGerbangs({ page: 1, search: '' }))
   }, [dispatch])
 
   useEffect(() => {
-    dispatch(fetchLalin({ tanggal, isSearchAll: false, page: 1 }))
-  }, [tanggal, isSearchAll, dispatch])
+    dispatch(fetchLalin({ tanggal: selectedTanggal, isSearchAll, page: 1 }))
+  }, [selectedTanggal, isSearchAll, dispatch])
   
   const metodeChart = useMemo(() => transformMetodeChart(lalinData), [lalinData])
   const gerbangChart = useMemo(() => transformGerbangChart(lalinData, gerbangData), [lalinData, gerbangData])
   const shiftPie = useMemo(() => transformShiftPie(lalinData), [lalinData])
   const cabangPie = useMemo(() => transformCabangPie(lalinData, gerbangData), [lalinData, gerbangData])
 
-  const handleSearchAll = () => {
-    dispatch(
-      fetchLalin({
-        isSearchAll: true,
-      }))
-    setTanggal(null)
-  }
+  // const handleSearchAll = () => {
+  //   setIsSearchAll(true)
+  //   setTanggal(null)
+  // }
   const handleResetFilter = () => {
-    const today = null
-    setTanggal(today)
-    setIsSearchAll(false)
-  
-    dispatch(
-      fetchLalin({
-        tanggal: today,
-        isSearchAll: false,
-        page: 1,
-      })
-    )
+    setIsSearchAll(true)
+    setTanggal(null)
   }
 
   return (
@@ -63,16 +62,19 @@ const DashboardPage = () => {
       <Box display="flex" gap={2} mb={3}>
         <TextField
           type="date"
-          value={tanggal || ''}
-          onChange={(e) => setTanggal(e.target.value)}
+          value={selectedTanggal || ''}
+          onChange={(e) => {
+            setTanggal(e.target.value)
+            setIsSearchAll(false)
+          }}
         />
 
-        <Button
+        {/* <Button
           variant="contained"
           onClick={handleSearchAll}
         >
           Search All
-        </Button>
+        </Button> */}
 
         <Button variant="outlined" color="secondary" onClick={handleResetFilter}>
           Reset

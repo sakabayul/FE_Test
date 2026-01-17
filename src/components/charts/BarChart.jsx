@@ -18,7 +18,7 @@ const BarChart = ({ title, data }) => {
       enabled: false,
     },
   };
-  console.log("BarChart data:", data);
+
   return (
     <>
       {data.categories.length > 0 && data.series.length > 0 ? (
